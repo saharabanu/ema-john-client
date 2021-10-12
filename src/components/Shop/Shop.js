@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import useCart from '../../hooks/useCart';
+import { addToDb } from '../../utilities/fakedb';
 import Cart from '../Cart/Cart';
 import Product from '../Product/Product';
-import { addToDb } from '../../utilities/fakedb';
 import './Shop.css';
-import useCart from '../../hooks/useCart';
-import { Link } from 'react-router-dom';
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
@@ -13,7 +13,7 @@ const Shop = () => {
     const [displayProducts, setDisplayProducts] = useState([]);
 
     useEffect(() => {
-        fetch('./products.JSON')
+        fetch('./products.json')
             .then(res => res.json())
             .then(data => {
                 setProducts(data);
