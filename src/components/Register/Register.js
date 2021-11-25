@@ -1,28 +1,81 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Alert, Spinner } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
+import { Link,useHistory } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 const Register = () => {
+    const history = useHistory();
+    
+    const { register, handleSubmit, reset } = useForm();
+    const {user,registerUser,isLoading,error} = useAuth();
+
+    
+    
+    const onSubmit = (data) => {
+
+      if(data.password !== data.password2){
+        alert('Your password does not match')
+        return
+      }
+      registerUser(data.email,data.password,data.name,history);
+      reset()
+       
+        
+        // console.log(data);
+      };
     return (
-        <div className="login-form">
-            <div>
-                <h2>Create Account</h2>
-               <form onSubmit="">
-                   <input type="text" name="" id=""  placeholder="your name"/>
-                   <br /> <br />
-               <input type="email" placeholder="your email" />
-               <br /> <br />
-               <input type="password" placeholder="your password" />
-               <br /> <br />
-               <input type="password" placeholder="Re-enter your password" />
-               <br /> <br />
-               <input type="submit" value="Submit" />
+        <div className="text-center">
+            <h2>Please Register</h2>
+            {!isLoading && <form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          className="input-field mb-3"
+          name="namet"
+          placeholder="Your Name"
+          type="text"
+          
+          {...register("name", { required: true })}
+        />
+        <br />
+        <input
+          className="input-field mb-3"
+          name="email"
+          placeholder="Email"
+          type="email"
+          
+          {...register("email", { required: true })}
+        />
+        <br />
+        <input
+          className="input-field mb-3"
+          name="password"
+          type="password"
+          placeholder="Password"
+          
+          {...register("password", { required: true })}
+        />
+        <br />
+        <input
+          className="input-field mb-3"
+          name="password2"
+          type="password"
+          placeholder="Re-enter Password"
+          
+          {...register("password2", { required: true })}
+        />
+        <br />
 
-               </form>
-               <p>Already have an account?  <Link to="/login">Login</Link></p>
+        <input
+          className="submit-btn btn btn-danger mt-3"
+          type="submit"
+          value="Register"
+        />
+      </form>}
+      {isLoading && <Spinner animation="border" variant="danger" />}
+      {user?.email && <Alert variant="success">Create user successfully</Alert>}
+      {error && <Alert variant="danger">{error}</Alert>}
+      <p>Already Have an Account?<Link to='/login'>Please Login</Link></p>
 
-               <div>---------or-----------</div>
-                <button className=" btn-regular">Google Sign In</button>
-            </div>
         </div>
     );
 };
