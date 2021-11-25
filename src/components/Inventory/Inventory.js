@@ -5,7 +5,11 @@ const Inventory = () => {
     const [orders,setOrders] = useState([]);
     const {user} = useAuth();
     useEffect(()=>{
-        fetch('http://localhost:5000/orders')
+        fetch('http://localhost:5000/orders',{
+            headers:{
+                'authorization':`Bearer ${localStorage.getItem('idToken')}`
+            }
+        })
         .then(res=>res.json())
         .then(data=>setOrders(data))
     },[])
